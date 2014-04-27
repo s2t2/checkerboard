@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Checker Board</title>
+  <style>
+  body {
+    font: 12px sans-serif;
+  }
+
+  .board {
+    margin-top:75px;
+    margin-left:425px;
+  }
+
+  .light rect {
+    fill: #fff;
+  }
+
+  .dark rect {
+    fill: steelblue;
+  }
+
+  </style>
+</head>
+<body>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script>
+
+    // GENERATE THE JSON DATA
+    var rows = [8,7,6,5,4,3,2,1];
+    var columns = ["a","b","c","d","e","f","g","h"];
+    var spaces = [];
+
+    for(i in columns){
+      var c = i
+      column = columns[i]
+      for(i in rows){
+        row = rows[i]
+        spaces.push(
+          {
+            column: column,
+            row: row,
+            name: column + row,
+            color: colorAlternator(parseInt(c) + parseInt(i)),
+            x:parseInt(c),
+            y:parseInt(i)
+          }
+        );
+      };
+    }; //-> [{column: "a", row: 1, name: "a1"} ... {column: "g", row: 8, name: "g8"]
+
+    // BUILD THE BOARD AND SPACES
+    var spaceHeight = 75;
+    var board = d3.select("body").append("svg").attr("height",spaceHeight* rows.length).attr("width",spaceHeight * columns.length).attr("class","board");
+    var tile_layer = board.selectAll("g")
+    var tile = tile_layer.data(spaces).enter().append("g")
+        .attr("id", function(d){
+          return d["name"]
+        })
+        .attr("class", function(d, i){
+          return "space" + d["column"] + " " + d["row"] + " " + d["color"]
+        })
+        .attr("transform", function(d, i) { 
+          return "translate(" + (d["x"] * spaceHeight) + "," + (d["y"] * spaceHeight) + ")"; 
+        });
+
+    var tile_rect = tile.append("rect")
+        .attr("width",spaceHeight)
+        .attr("height",spaceHeight)
+        .attr("stroke","#000")
+
+    var tile_label = tile.append("text")
+        .attr("x", function(d){
+          return d["x"]
+        })
+        .attr("y", function(d){
+          return d["y"]
+        })
+        .text(function(d) {
+          return d["name"];
+        })
+        .attr("dy", "10px")
+        .attr("dx", "3px")
+
+    function colorAlternator(n){
+      if(n % 2 == 0){ 
+        return "light"
+      }
+      else { 
+        return "dark"
+      }
+    }
+  </script>
+</body>
+</html>
