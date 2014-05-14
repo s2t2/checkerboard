@@ -4,12 +4,26 @@
   <meta charset="utf-8">
   <title>Checkerboard</title>
   <style>
-    body {font:12px sans-serif;}
-    #page {display:block;margin:0 auto;}
-    #board {margin-bottom:1em;}
-    .bordered {border:1px solid #eee;}
-    .light rect {fill: #fff;}
-    .dark rect {fill: steelblue;}
+    body {
+      background-color:#eee;
+      font:12px sans-serif;
+    }
+    #page {
+      display:block;
+      margin:0 auto;
+    }
+    #board {
+      margin-bottom:1em;
+    }
+    .bordered {
+      border:1px solid #eee;
+    }
+    .light rect {
+      fill: #fff;
+    }
+    .dark rect {
+      fill: steelblue;
+    }
   </style>
 </head>
 <body>
@@ -21,7 +35,7 @@
     var columns = ["a","b","c","d","e","f","g","h"];
 
     var page = d3.select("div#page")
-        .attr("style","width:" + (s*rows.length) + "px;");
+        .attr("style","width:" + (s * rows.length + 1) + "px;");
 
     var header = page.append("div")
         .attr("id","header");
@@ -32,8 +46,8 @@
 
     var board = page.append("svg")
         .attr("id","board")
-        .attr("height",s* rows.length)
-        .attr("width",s * columns.length);
+        .attr("height", s * rows.length)
+        .attr("width", s * columns.length);
 
     var tile_layer = board.selectAll("g");
 
@@ -61,13 +75,13 @@
           return d["name"]
         })
         .attr("class", function(d, i){
-          return "space" + d["column"] + " " + d["row"] + " " + d["color"]
+          return "space" + " " + d["column"] + " " + d["row"] + " " + d["color"]
         })
         .attr("transform", function(d, i) { 
-          return "translate(" + (d["x"] * s) + "," + (d["y"] * s) + ")"; 
+          return "translate(" + (d["x"] * s) + "," + (d["y"] * s) + ")";
         });
 
-    var tile_rect = tile.append("rect")
+    var tile_square = tile.append("rect")
         .attr("width",s)
         .attr("height",s)
         .attr("stroke","#000");
@@ -97,6 +111,48 @@
         return "dark"
       }
     };
+
+    
+    tile_square.on("mouseover", fillBlue)
+    tile_square.on("click", fillWhite)
+    //tile_square.on("dblclick", fillWhite)
+    //tile_square.on("mouseout", fillRed)
+
+    //tile_square.on("mouseover", function(d){
+    //  
+    //});
+    ////tile_square.on("mouseout", fillBlack)
+    //tile_square.on("click", fillCheckered()) // function(d){return d.x + d.y;}
+    //tile_square.on("dblclick", fillWhite)
+
+    function fillWhite(){
+      d3.select(this).style("fill", "white")
+    };
+    
+    function fillBlack(){
+      d3.select(this).style("fill", "black")
+    };
+    
+    function fillBlue(){
+      d3.select(this).style("fill", "steelblue")
+    };
+    
+    function fillRed(){
+      d3.select(this).style("fill", "red")
+    };
+    
+    //var something;
+    //function fillCheckered(){
+    //  something = d3.select(this);
+    //  console.log(something)
+    //  
+    //  //if(n % 2 == 0){
+    //  //  fillWhite()
+    //  //}
+    //  //else { 
+    //  //  fillBlue()
+    //  //}
+    //};
   </script>
 </body>
 </html>
